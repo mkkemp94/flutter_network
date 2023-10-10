@@ -1,4 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<http.Response> fetchAlbum() {
+  // get() returns a [Future] that contains a [Response]
+  return http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  const Album({required this.userId, required this.id, required this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(userId: json["userId"], id: json["id"], title: json["title"]);
+  }
+}
 
 void main() {
   runApp(const MyApp());
