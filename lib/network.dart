@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 
 Future<Album> fetchAlbum() async {
   final http.Response response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Basic your_api_token_here',
-      },
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+    headers: {
+      HttpHeaders.authorizationHeader: 'Basic your_api_token_here',
+    },
   );
 
   if (response.statusCode == 200) {
@@ -22,12 +22,10 @@ Future<Album> fetchAlbum() async {
 Future<Album> createAlbum(String title) async {
   final http.Response response = await http.post(
     Uri.parse('https://jsonplaceholder.typicode.com/albums'),
-    headers: <String, String> {
+    headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String> {
-      'title': title
-    }),
+    body: jsonEncode(<String, String>{'title': title}),
   );
 
   if (response.statusCode == 201) {
@@ -41,12 +39,10 @@ Future<Album> createAlbum(String title) async {
 Future<Album> updateAlbum(String title) async {
   final http.Response response = await http.put(
     Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
-    headers: <String, String> {
+    headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String> {
-      'title': title
-    }),
+    body: jsonEncode(<String, String>{'title': title}),
   );
 
   if (response.statusCode == 200) {
@@ -57,9 +53,25 @@ Future<Album> updateAlbum(String title) async {
   throw Exception("Failed to update album");
 }
 
+Future<Album> deleteAlbum(String id) async {
+  final http.Response response = await http.delete(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    // OK
+    return Album.fromJson(jsonDecode(response.body));
+  }
+
+  throw Exception("Failed to delete album");
+}
+
 class Album {
-  final int id;
-  final String title;
+  final int? id;
+  final String? title;
 
   const Album({required this.id, required this.title});
 

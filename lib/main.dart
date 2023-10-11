@@ -69,7 +69,7 @@ class _NetworkScreenState extends State<NetworkScreen> {
 
                         // C2
                         Text(
-                          snapshot.data!.title,
+                          snapshot.data?.title ?? 'Deleted',
                           style: style,
                         ),
 
@@ -97,6 +97,21 @@ class _NetworkScreenState extends State<NetworkScreen> {
                           },
                           child: Text(
                             'Update Album',
+                            style: style,
+                          ),
+                        ),
+
+                        // C6
+                        ElevatedButton(
+                          onPressed: () {
+                            // On click
+                            setState(() {
+                              _futureAlbum =
+                                  deleteAlbum(snapshot.data!.id.toString());
+                            });
+                          },
+                          child: Text(
+                            'Delete Album',
                             style: style,
                           ),
                         ),
