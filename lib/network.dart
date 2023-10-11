@@ -3,6 +3,22 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
+Future<Album> fetchAlbum() async {
+  final http.Response response = await http.get(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Basic your_api_token_here',
+      },
+  );
+
+  if (response.statusCode == 200) {
+    // OK
+    return Album.fromJson(jsonDecode(response.body));
+  }
+
+  throw Exception('Failed to load album');
+}
+
 Future<Album> createAlbum(String title) async {
   final http.Response response = await http.post(
     Uri.parse('https://jsonplaceholder.typicode.com/albums'),
@@ -19,15 +35,18 @@ Future<Album> createAlbum(String title) async {
     return Album.fromJson(jsonDecode(response.body));
   }
 
-  throw Exception("Failed to create simple album");
+  throw Exception("Failed to create album");
 }
 
-Future<Album> fetchAlbum() async {
-  final http.Response response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Basic your_api_token_here',
-      },
+Future<Album> updateAlbum(String title) async {
+  final http.Response response = await http.put(
+    Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+    headers: <String, String> {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String> {
+      'title': title
+    }),
   );
 
   if (response.statusCode == 200) {
@@ -35,7 +54,7 @@ Future<Album> fetchAlbum() async {
     return Album.fromJson(jsonDecode(response.body));
   }
 
-  throw Exception('Failed to load album');
+  throw Exception("Failed to update album");
 }
 
 class Album {
